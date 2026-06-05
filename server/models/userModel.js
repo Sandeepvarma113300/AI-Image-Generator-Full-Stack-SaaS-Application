@@ -5,5 +5,5 @@ const userSchema=new mongoose.Schema({
     password :{type: String, required:true},
     creditBalance:{type:Number,default:5},
 })
-const userModel=mongoose.models.user || mongoose.model("User",userSchema)
+const userModel=mongoose.models.User || mongoose.model("User",userSchema)
 export default userModel;
