@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'motion/react'
-import { assets, testimonialsData } from '../assets/assets'
+import { testimonialsData } from '../assets/assets'
 
 const StarIcon = () => (
     <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">

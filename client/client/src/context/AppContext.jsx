@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -10,9 +10,9 @@ const AppContextProvider = (props) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [credit, setCredit] = useState(false);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const loadCreditsData = async () => {
+  const loadCreditsData = useCallback(async () => {
     try {
       const { data } = await axios.post(backendUrl + '/api/user/credits', {}, {
         headers: { token }
@@ -23,10 +23,9 @@ const AppContextProvider = (props) => {
         setUser(data.user);
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.message);
     }
-  };
+  }, [backendUrl, token]);
 
   const generateImage = async (prompt) => {
     try {
@@ -47,7 +46,6 @@ const AppContextProvider = (props) => {
         }
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.message);
     }
   };
@@ -59,11 +57,13 @@ const AppContextProvider = (props) => {
     setCredit(false);
   };
 
+  // Fetch user credits whenever token changes (login/logout).
+  // This is an intentional external-data-sync pattern.
   useEffect(() => {
     if (token) {
-      loadCreditsData();
+      loadCreditsData(); // eslint-disable-line react-hooks/set-state-in-effect
     }
-  }, [token]);
+  }, [token, loadCreditsData]);
 
   const value = {
     user, setUser,
@@ -84,3 +84,4 @@ const AppContextProvider = (props) => {
 };
 
 export default AppContextProvider;
+
