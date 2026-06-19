@@ -1,11 +1,251 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
 @import "tailwindcss";
-*{
-    font-family: Outfit;
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
 }
-.placeholder-color{
-    color: #e0e0e0;
-    font-weight: 300;
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #f3f4f6;
+  font-family: 'Inter', sans-serif;
+  background-color: #0a0a12;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Premium Dark Background Canvas with Animated Aurora Blobs & Tactile Noise */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -10;
+  
+  /* Background layers stacked from top to bottom:
+     1. Tactile SVG Fractal Noise at 3% Opacity (Data URI)
+     2. Aurora Purple Gradient Blob
+     3. Aurora Blue Gradient Blob
+     4. Aurora Pink Gradient Blob
+     5. Dark Indigo-to-Black Base Gradient
+  */
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.16) 0%, rgba(124, 58, 237, 0) 50%),
+    radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.16) 0%, rgba(59, 130, 246, 0) 50%),
+    radial-gradient(circle at 50% 10%, rgba(236, 72, 153, 0.12) 0%, rgba(236, 72, 153, 0) 40%),
+    linear-gradient(135deg, #0a0a12 0%, #14102b 100%);
+  
+  background-size: 
+    200px 200px,
+    140% 140%,
+    140% 140%,
+    140% 140%,
+    100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed;
+  animation: aurora-drift 28s infinite alternate ease-in-out;
+  pointer-events: none;
+}
+
+/* Keyframes to slowly drift the radial aurora blobs */
+@keyframes aurora-drift {
+  0% {
+    background-position: 
+      0 0,
+      10% 20%,
+      90% 80%,
+      40% 15%,
+      0 0;
+  }
+  50% {
+    background-position: 
+      0 0,
+      80% 60%,
+      15% 35%,
+      70% 85%,
+      0 0;
+  }
+  100% {
+    background-position: 
+      0 0,
+      25% 85%,
+      75% 15%,
+      30% 50%,
+      0 0;
+  }
+}
+
+/* Reusable Premium Glassmorphism Utility Classes */
+@utility glass-panel {
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.5rem; /* rounded-3xl */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+@utility glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 40px rgba(124, 58, 237, 0.15), 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+}
+
+@utility glass-input {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &:focus {
+    border-color: rgba(192, 132, 252, 0.5);
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+  }
+}
+
+/* Subtle gradient text utility for hero headings */
+@utility hero-gradient-text {
+  background-image: linear-gradient(135deg, #ffffff 30%, #e9d5ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+}
+
+/* Custom premium elements */
+.placeholder-color {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(124, 58, 237, 0.3), 0 0 4px rgba(59, 130, 246, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(124, 58, 237, 0.65), 0 0 10px rgba(59, 130, 246, 0.35);
+  }
+}
+
+@utility cta-pulse {
+  animation: pulse-glow 2.5s infinite ease-in-out;
+}
+
+/* Infinite horizontal marquee strip */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 40s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Animated conic-gradient spinning border for bento cards */
+@keyframes spin-border {
+  0% { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.animated-border {
+  --border-angle: 0deg;
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+.animated-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--border-angle), transparent 40%, rgba(124, 58, 237, 0.6) 50%, rgba(59, 130, 246, 0.6) 60%, transparent 70%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: spin-border 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.animated-border:hover::before {
+  opacity: 1;
+}
+
+/* Shimmer skeleton animation for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Button loading bar shimmer */
+@keyframes btn-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.btn-loading-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-loading-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+  animation: btn-shimmer 1.5s ease-in-out infinite;
 }

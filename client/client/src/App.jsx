@@ -11,8 +11,7 @@ import { AppContext } from './context/AppContext'
 const App = () => {
   const{showlogin}=useContext(AppContext)
   return (
-    <div className='px-4 sm:px-10 md:px-14 lg:px-28 min-h-screen bg-gradient-to-b from-teal-50
-    to-orange-50'>
+    <div className='px-4 sm:px-10 md:px-14 lg:px-28 min-h-screen text-white relative z-10 pt-28 pb-10'>
       <Navbar/>
       {showlogin && <Login/>}
       <Routes>
